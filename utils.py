@@ -18,9 +18,20 @@ class FileUtils:
         return result
 
     @staticmethod
+    def sanitize_directory_name(name: str) -> str:
+        """Sanitize directory names to remove invalid characters."""
+        return re.sub(r'[<>:"/|?*]', '', name)
+
+    @staticmethod
     def get_metadata(audio: FLAC, key: str, default: str = 'Unknown') -> str:
-        """Retrieve metadata from audio."""
-        value = audio.get(key, [default])[0]
+        """Retrieve metadata from audio, case-insensitively."""
+        key_lower = key.lower()
+        audio_dict = {k.lower(): v for k, v in audio.items()}
+
+        try:
+            value = audio_dict[key_lower][0]  # Use dictionary-style access to get the correct metadata value
+        except KeyError:
+            value = default
         logger.debug(f"Retrieved metadata for key '{key}': {value}")
         return value
 

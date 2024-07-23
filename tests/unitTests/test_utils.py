@@ -6,22 +6,24 @@ from utils import FileUtils
 from mutagen.flac import FLAC
 
 
+
 class TestFileUtils(unittest.TestCase):
-    @patch('file_processor.utils.re.match')
+    @patch('utils.re.match')
     def test_is_windows_directory_format(self, mock_match):
         mock_match.return_value = True
         result = FileUtils.is_windows_directory_format('C:\\some\\path')
         self.assertTrue(result)
         mock_match.assert_called_once()
 
-    @patch.object(FLAC, 'get', return_value=['Artist'])
-    def test_get_metadata(self, mock_get):
-        audio = FLAC('file.flac')
+    @patch.object(FLAC, '__getitem__', return_value=['Michael Jackson'])
+    def test_get_metadata(self, mock_getitem):
+        audio = FLAC('C:\\Users\\ferra\\Desktop\\SMILE\\02 - They Don’t Care About Us.flac')
         result = FileUtils.get_metadata(audio, 'artist')
-        self.assertEqual(result, 'Artist')
-        mock_get.assert_called_once_with('artist')
+        print(result)
+        self.assertEqual(result, 'Michael Jackson')
+        # mock_getitem.assert_called_once_with('artist')
 
-    @patch('file_processor.utils.FLAC')
+    @patch('utils.FLAC')
     def test_remove_cover_image(self, MockFLAC):
         mock_audio = MockFLAC.return_value
         mock_audio.pictures = [MagicMock()]

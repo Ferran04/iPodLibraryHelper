@@ -4,13 +4,20 @@ import os
 
 from converters import FLACToAACConversion, FLACToWAVConversion, ConversionStrategy
 from processor import FileProcessor
+from utils import FileUtils
+from Album import Album
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def main():
     conversion_strategy = get_conversion_strategy()
     dir_library = get_directory_path(conversion_strategy)
-    processor = FileProcessor(dir_library, conversion_strategy)
-    processor.process_files()
+    processor = FileProcessor(dir_library, conversion_strategy, True)
+    album = Album()
+    processor.process_files(album)
 
 
 def get_conversion_strategy() -> ConversionStrategy:
@@ -25,6 +32,9 @@ def get_conversion_strategy() -> ConversionStrategy:
         return FLACToWAVConversion()
     else:
         raise ValueError("Invalid choice. Please select 1 or 2.")
+
+
+
 
 
 def get_directory_path(strategy: ConversionStrategy) -> str:
