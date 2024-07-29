@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 def main():
     conversion_strategy = get_conversion_strategy()
     dir_library = get_directory_path(conversion_strategy)
-    processor = FileProcessor(dir_library, conversion_strategy, True)
+    processor = FileProcessor(dir_library, conversion_strategy)
     album = Album()
     processor.process_files(album)
 

@@ -18,7 +18,7 @@ class FileProcessor:
         self.converter = Converter(strategy)
         while True:
             destructive = input("Will you want to delete the files after the process? type 1 if yes, otherwise type any other thing\n")
-            if destructive is 1:
+            if destructive == 1:
                 self.destructive = True
                 break
             else:
@@ -46,7 +46,7 @@ class FileProcessor:
 
     def create_directory_structure(self, artist: str, album: str, date: str) -> str:
         """Create directory structure based on metadata."""
-        album_dir = FileUtils.sanitize_directory_name(f"{artist.upper()}\\{album} ({date})")
+        album_dir = FileUtils.sanitize_directory_name(f"{artist.upper()}\\{album.upper()}")
         target_dir = os.path.join(self.dir_library, album_dir)
         os.makedirs(target_dir, exist_ok=True)
         logger.info(f"Created directory: {target_dir}")
