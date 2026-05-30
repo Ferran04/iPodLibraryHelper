@@ -27,10 +27,15 @@ class Folder:
         logger.info(f"Selected album directory: {directory}")
         return directory
 
-    def get_sub_folders(self):
-        sub_folders = []
-        for folder in os.listdir(self.folder_name):
-            if os.path.isdir(folder):
-                sub_folders += Folder(folder).get_sub_folders()
-        sub_folders.append(self.folder_name)
-        return sub_folders
+    def get_folder_albums(self):
+        folder_albums = []
+        count_folders = 0
+        subfolders = [e for e in os.listdir(self.folder_name) if os.path.isdir(os.path.join(self.folder_name, e))]
+
+        for folder in subfolders:
+            folder_albums += Folder(os.path.join(self.folder_name, folder)).get_folder_albums()
+            count_folders += 1
+
+        if count_folders == 0:
+            folder_albums.append(Album(self.folder_name))
+        return folder_albums

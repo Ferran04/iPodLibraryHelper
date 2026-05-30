@@ -1,26 +1,14 @@
 import os
 from typing import Dict, Any
-from utils import FileUtils
 import logging
-
+import re
 logger = logging.getLogger(__name__)
 
 class Album:
-    def __init__(self):
+    def __init__(self, album_folder: str):
         self.songs = []
-        self.folder = self.input_directory()
+        self.folder = album_folder
         self.metadata = dict()
-
-    @staticmethod
-    def input_directory() -> str:
-        """Prompt user for input directory and validate it."""
-        directory = input("Please enter the source directory for the album you want to work with\n")
-        while not os.path.isdir(directory) or not FileUtils.is_windows_directory_format(directory):
-            logger.warning(f"Invalid directory entered: {directory}")
-            directory = input("PLEASE ENTER A VALID DIRECTORY\n")
-        print(f'You selected the album directory: {directory}\n')
-        logger.info(f"Selected album directory: {directory}")
-        return directory
 
     def add_song(self, song: 'Song'):
         self.songs.append(song)
@@ -32,7 +20,16 @@ class Album:
             print("Metadata not found, please enter the metadata manually\n")
             self.metadata['artist'] = input("Artist: \n")
             self.metadata['album'] = input("Album Title: \n")
-            self.metadata['date'] = input("Date: \n")
+            self.metadata['year'] = input("Year: \n")
         logger.info(f"Metadata set from first file: Artist: {self.metadata['artist']}, Album: {self.metadata['album'] }, "
-                    f"Date: {self.metadata['date'] }")
+                    f"Year: {self.metadata['year'] }")
         return self.metadata
+
+    @staticmethod
+    def clean_title(title, common_suffix):
+        # Use regex to remove the suffix only at the end
+        return re.sub(re.escape(common_suffix) + r'$', '', title)
+
+    def remove_suffixes(self, common_suffix):
+        for song in self.songs:
+            song.metadata['title'] = self.clean_title(song.metadata['title'], common_suffix)

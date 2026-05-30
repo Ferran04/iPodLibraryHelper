@@ -6,7 +6,7 @@ from converters import FLACToAACConversion, FLACToWAVConversion, ConversionStrat
 from processor import FileProcessor
 from utils import FileUtils
 from Album import Album
-
+from Folder import Folder
 import logging
 
 logger = logging.getLogger(__name__)
@@ -16,8 +16,8 @@ def main():
     conversion_strategy = get_conversion_strategy()
     dir_library = get_directory_path(conversion_strategy)
     processor = FileProcessor(dir_library, conversion_strategy)
-    album = Album()
-    processor.process_files(album)
+    folder = Folder()
+    processor.process_files(folder)
 
 
 def get_conversion_strategy() -> ConversionStrategy:
@@ -34,11 +34,8 @@ def get_conversion_strategy() -> ConversionStrategy:
         raise ValueError("Invalid choice. Please select 1 or 2.")
 
 
-
-
-
 def get_directory_path(strategy: ConversionStrategy) -> str:
-    base_dir = 'E:\\1. IPOD LIBRARY'  # Base directory can be a constant or dynamically set
+    base_dir = 'D:\\1. IPOD LIBRARY'  # Base directory can be a constant or dynamically set
     if isinstance(strategy, FLACToAACConversion):
         return os.path.join(base_dir, '256 AAC')
     elif isinstance(strategy, FLACToWAVConversion):
